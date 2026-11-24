@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TripPilot · AI travel booking</title>
+  <meta name="description" content="Book a flight, a hotel, a car or a whole trip by just asking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<div class="app">
+
+  <!-- Ask: home + chat -->
+  <main id="view-ask" class="view" aria-labelledby="ask-title">
+    <header class="topbar">
+      <a class="brand" href="#ask" aria-label="TripPilot home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l20-8-8 14-2-6z"/></svg>
+        </span>
+        <span class="brand-name">TripPilot</span>
+      </a>
+      <button id="new-chat" class="icon-btn" type="button" aria-label="New conversation" hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </header>
+
+    <section id="home" class="home">
+      <h1 id="ask-title">Where do you need to go?</h1>
+      <p class="lede">A flight, a hotel tonight, or a whole trip. Just ask.</p>
+
+      <h2 class="section-label">Book just what you need</h2>
+      <div class="quick-grid">
+        <button type="button" class="quick" data-starter="I need a flight from ">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+          Flight
+        </button>
+        <button type="button" class="quick" data-starter="I need a hotel in ">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20V6M3 16h18v4M21 16v-4a3 3 0 0 0-3-3h-7v7"/><circle cx="7" cy="12" r="2"/></svg>
+          Hotel
+        </button>
+        <button type="button" class="quick" data-starter="I need car hire in ">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17h14v-5l-2-5H7l-2 5zM5 12h14"/><circle cx="8" cy="17" r="2"/><circle cx="16" cy="17" r="2"/></svg>
+          Car hire
+        </button>
+        <button type="button" class="quick" data-starter="I need an airport transfer in ">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v10H4zM8 17v2M16 17v2M9 4h6v3H9z"/></svg>
+          Transfer
+        </button>
+        <button type="button" class="quick" data-starter="I need an eSIM for ">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7zM10 11h5v6h-5z"/></svg>
+          eSIM
+        </button>
+        <button type="button" class="quick" data-starter="I need travel insurance for ">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>
+          Insurance
+        </button>
+      </div>
+
+      <h2 class="section-label">Try asking</h2>
+      <div class="chips">
+        <button type="button" class="chip" data-send>Cheapest flight Perth to Sydney this Friday</button>
+        <button type="button" class="chip" data-send>Hotel near Perth airport tonight, just me</button>
+        <button type="button" class="chip" data-send>Work trip to Melbourne next Monday to Wednesday</button>
+        <button type="button" class="chip" data-send>I'm flying to Bali, need an eSIM and insurance</button>
+      </div>
+    </section>
+
+    <section id="log" class="log" aria-live="polite" aria-label="Conversation"></section>
+
+    <form id="composer" class="composer" autocomplete="off">
+      <div class="composer-row">
+        <label for="q" class="sr-only">Message TripPilot</label>
+        <textarea id="q" rows="1" maxlength="2000" placeholder="Where do you need to go?"></textarea>
+        <button class="send" type="submit" aria-label="Send">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <p class="disclosure">We may earn a commission when you book through our links, at no extra cost to you.</p>
+    </form>
+  </main>
+
+  <!-- Trips -->
+  <main id="view-trips" class="view" hidden aria-labelledby="trips-title">
+    <div class="page">
+      <h1 id="trips-title">My trips</h1>
+      <div id="trips"></div>
+    </div>
+  </main>
+
+  <!-- Price alerts -->
+  <main id="view-alerts" class="view" hidden aria-labelledby="alerts-title">
+    <div class="page">
+      <h1 id="alerts-title">Price alerts</h1>
+      <form id="alert-form" class="card form" novalidate>
+        <h2>Watch a route</h2>
+        <div class="form-grid">
+          <label>From <input name="origin" placeholder="PER" maxlength="3" required></label>
+          <label>To <input name="destination" placeholder="DPS" maxlength="3" required></label>
+          <label>Depart month <input name="depart_month" type="month" required></label>
+          <label>Return month <input name="return_month" type="month"></label>
+          <label>Alert me below <input name="target_price" type="number" min="1" step="1" placeholder="350" required></label>
+          <label>Email (optional) <input name="email" type="email" placeholder="you@example.com"></label>
+        </div>
+        <p class="form-hint">Use 3-letter airport or city codes, e.g. PER, SYD, DPS. Or just ask in chat.</p>
+        <p id="alert-error" class="error" role="alert"></p>
+        <button class="btn primary" type="submit">Create alert</button>
+      </form>
+      <div id="alerts"></div>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="Main">
+    <a href="#ask" data-tab="ask">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-4-7.5L21 3v6h-6"/></svg>Ask
+    </a>
+    <a href="#trips" data-tab="trips">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16v12H4zM9 8V5h6v3"/></svg>Trips
+    </a>
+    <a href="#alerts" data-tab="alerts">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Price alerts
+    </a>
+  </nav>
+  <div id="toast" class="toast" role="status" hidden></div>
+</div>
+</body>
+</html>

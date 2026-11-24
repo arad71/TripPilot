@@ -1,0 +1,27 @@
+services:
+  app:
+    build: .
+    env_file: backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://trippilot:trippilot@db:5432/trippilot
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: trippilot
+      POSTGRES_PASSWORD: trippilot
+      POSTGRES_DB: trippilot
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U trippilot"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  pgdata:
